@@ -25,6 +25,9 @@ DEFAULT_WIDTH = '500 mm'
 DEFAULT_HEIGHT = '300 mm'
 DEFAULT_DEPTH = '400 mm'
 DEFAULT_THICKNESS = '6 mm'
+DEFAULT_COMPONENT = app.activeProduct.rootComponent
+
+
 
 
 def buildAll(component, w, h, d, thickness):
@@ -157,8 +160,19 @@ class BoxMakerCommandExecuteHandler(adsk.core.CommandEventHandler):
                 ui.messageBox('No active Fusion design', 'No Design')
                 return
 
-            # Get root component
-            component = design.rootComponent
+            if not inputs['componentInput'].value == '':    
+                # Get the root component of the active design
+                rootComp = DEFAULT_COMPONENT
+
+                allOccs = rootComp.occurrences
+                transform = adsk.core.Matrix3D.create()
+
+                # Create a component under root component
+                occ1 = allOccs.addNewComponent(transform)
+                occ1.component.name = inputs['componentInput'].value
+                component=occ1.component
+            else:
+                component = DEFAULT_COMPONENT
 
             # Built it!
             buildAll(
@@ -227,6 +241,12 @@ class BoxMakerCommandCreatedHandler(adsk.core.CommandCreatedEventHandler):
                 'Wall Thickness',
                 'mm',
                 adsk.core.ValueInput.createByString(DEFAULT_THICKNESS)
+            )
+
+            cmd.commandInputs.addStringValueInput(
+                'componentInput', 
+                'Component,empty for root', 
+                ''
             )
 
         except:
