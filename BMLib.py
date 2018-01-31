@@ -9,8 +9,8 @@ def genFrontPoints(w, h, d, t):
     return chain(
         genHorizontalLinePoints(0, 0, w, t, 0),
         genVerticalLinePoints(w, 0, h, -t, 0),
-        genHorizontalLinePoints(w, h - t, -w, t, 0),
-        genVerticalLinePoints(0, h, -h, t, -t),
+        genHorizontalLinePoints(w, h, -w, -t, 0),
+        genVerticalLinePoints(0, h, -h, t, 0),
     )
 
 
@@ -22,8 +22,8 @@ def genLeftPoints(w, h, d, t):
     return chain(
         genHorizontalLinePoints(0, 0, -d, t, -t),
         genVerticalLinePoints(-d + t, 0, h, -t, 0),
-        genHorizontalLinePoints(-d, h - t, d, t, t),
-        genVerticalLinePoints(-t, h, -h, t, -t),
+        genHorizontalLinePoints(-d, h, d, -t, t),
+        genVerticalLinePoints(-t, h, -h, t, 0),
     )
 
 
@@ -41,12 +41,8 @@ def genBottomPoints(w, h, d, t):
 
 
 def genTopPoints(w, h, d, t):
-    return chain(
-        genHorizontalLinePoints(0, 0, w, -t, 0),
-        genVerticalLinePoints(w, 0, -d, -t, 0),
-        genHorizontalLinePoints(w, -d, -w, t, 0),
-        genVerticalLinePoints(0, -d, d, t, 0),
-    )
+    return genBottomPoints(w, h, d, t)
+    
 
 
 def genHorizontalLinePoints(x, y, length, notchHeight, offset):
