@@ -31,59 +31,47 @@ DEFAULT_COMPONENT = app.activeProduct.rootComponent
 
 
 def buildAll(component, w, h, d, thickness):
-    buildFront(component, w, h, d, thickness)
-    buildBack(component, w, h, d, thickness)
-    buildLeft(component, w, h, d, thickness)
-    buildRight(component, w, h, d, thickness)
-    buildBottom(component, w, h, d, thickness)
-    buildTop(component, w, h, d, thickness)
+    buildFrontBack(component, w, h, d, thickness)
+    buildLeftRight(component, w, h, d, thickness)
+    buildTopBottom(component, w, h, d, thickness)
 
 
-def buildFront(component, w, h, d, thickness):
+def buildFrontBack(component, w, h, d, thickness):
     sketch = component.sketches.add(component.xYConstructionPlane)
     sketchPoints(sketch, genFrontPoints(w, h, d, thickness))
     e = extrudeSketch(component, sketch, thickness)
-    e.faces[0].body.name = "Front"
-    moveExt(component, e, 'z', d - thickness)
-
-
-def buildBack(component, w, h, d, thickness):
-    sketch = component.sketches.add(component.xYConstructionPlane)
-    sketchPoints(sketch, genBackPoints(w, h, d, thickness))
-    e = extrudeSketch(component, sketch, thickness)
     e.faces[0].body.name = "Back"
+    
+    copyPasteFeature = component.features.copyPasteBodies.add(e.bodies.item(0))
+    copyPasteBody = copyPasteFeature.bodies.item(0)
+    copyPasteBody.name = "Front"
+    moveExt(component, copyPasteFeature, 'z', d - thickness)
 
 
-def buildLeft(component, w, h, d, thickness):
-    sketch = component.sketches.add(component.yZConstructionPlane)
-    sketchPoints(sketch, genLeftPoints(w, h, d, thickness))
-    e = extrudeSketch(component, sketch, thickness)
-    e.faces[0].body.name = "Left"
-
-
-def buildRight(component, w, h, d, thickness):
+def buildLeftRight(component, w, h, d, thickness):
     sketch = component.sketches.add(component.yZConstructionPlane)
     sketchPoints(sketch, genRightPoints(w, h, d, thickness))
     e = extrudeSketch(component, sketch, thickness)
     e.faces[0].body.name = "Right"
+
+    copyPasteFeature = component.features.copyPasteBodies.add(e.bodies.item(0))
+    copyPasteBody = copyPasteFeature.bodies.item(0)
+    copyPasteBody.name = "Left"
     moveExt(component, e, 'x', w - thickness)
 
 
-def buildBottom(component, w, h, d, thickness):
-    sketch = component.sketches.add(component.xZConstructionPlane)
-    sketchPoints(sketch, genBottomPoints(w, h, d, thickness))
-    e = extrudeSketch(component, sketch, thickness)
-    e.faces[0].body.name = "Bottom"
-
-
-def buildTop(component, w, h, d, thickness):
+def buildTopBottom(component, w, h, d, thickness):
     sketch = component.sketches.add(component.xZConstructionPlane)
     sketchPoints(sketch, genTopPoints(w, h, d, thickness))
     e = extrudeSketch(component, sketch, thickness)
     e.faces[0].body.name = "Top"
+
+    copyPasteFeature = component.features.copyPasteBodies.add(e.bodies.item(0))
+    copyPasteBody = copyPasteFeature.bodies.item(0)
+    copyPasteBody.name = "Bottom"
     moveExt(component, e, 'y', h - thickness)
 
-
+    
 def moveExt(component, ext, axis, distance):
     if axis not in ('x', 'y', 'z'):
         raise ValueError("Axis must be one of x, y, z.")
