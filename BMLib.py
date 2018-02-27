@@ -1,17 +1,15 @@
-from itertools import chain
-
 
 #: Multiple of notch height
 IDEAL_NOTCH_WIDTH = 4
 
 
 def genFrontPoints(w, h, d, t):
-    return chain(
-        genHorizontalLinePoints(0, 0, w, t, 0),
-        genVerticalLinePoints(w, 0, h, -t, 0),
-        genHorizontalLinePoints(w, h, -w, -t, 0),
-        genVerticalLinePoints(0, h, -h, t, 0),
-    )
+    PList=list()
+    PList.extend(genHorizontalLinePoints(0, 0, w, t, 0))
+    PList.extend(genVerticalLinePoints(w, 0, h, -t, 0))
+    PList.extend(genHorizontalLinePoints(w, h, -w, -t, 0))
+    PList.extend(genVerticalLinePoints(0, h, -h, t, 0))
+    return PList
 
 
 def genBackPoints(w, h, d, t):
@@ -19,12 +17,13 @@ def genBackPoints(w, h, d, t):
 
 
 def genLeftPoints(w, h, d, t):
-    return chain(
-        genHorizontalLinePoints(0, 0, -d, t, -t),
-        genVerticalLinePoints(-d + t, 0, h, -t, 0),
-        genHorizontalLinePoints(-d, h, d, -t, t),
-        genVerticalLinePoints(-t, h, -h, t, 0),
-    )
+    PList=list()
+    PList.extend(genHorizontalLinePoints(0, 0, -d, t, -t))
+    PList.extend(genVerticalLinePoints(-d + t, 0, h, -t, 0))
+    PList.extend(genHorizontalLinePoints(-d, h, d, -t, t))
+    PList.extend(genVerticalLinePoints(-t, h, -h, t, 0))
+    return PList
+
 
 
 def genRightPoints(w, h, d, t):
@@ -32,12 +31,12 @@ def genRightPoints(w, h, d, t):
 
 
 def genBottomPoints(w, h, d, t):
-    return chain(
-        genHorizontalLinePoints(0, -t, w, t, t),
-        genVerticalLinePoints(w - t, 0, -d, t, -t),
-        genHorizontalLinePoints(w, -d + t, -w, -t, -t),
-        genVerticalLinePoints(t, -d, d, -t, t),
-    )
+    PList=list()
+    PList.extend(genHorizontalLinePoints(0, -t, w, t, t))
+    PList.extend(genVerticalLinePoints(w - t, 0, -d, t, -t))
+    PList.extend(genHorizontalLinePoints(w, -d + t, -w, -t, -t))
+    PList.extend(genVerticalLinePoints(t, -d, d, -t, t))
+    return PList
 
 
 def genTopPoints(w, h, d, t):
